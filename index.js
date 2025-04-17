@@ -28,13 +28,13 @@ let currentId = animals.length;
 
 // SERVER
 app.post("/animals", (req, res) => {
+  currentId++;
   animals.push({
-    id: currentId + 1,
+    id: currentId,
     name: req.body.name,
     strength: req.body.strength,
   });
-  currentId++;
-  res.sendStatus(201);
+  res.status(201).send({ id: currentId });
 });
 
 app.get("/animals", (req, res) => {
@@ -51,6 +51,27 @@ app.delete("/animals/:id", (req, res) => {
     // Borre un elemento
     animals = filteredAnimals;
     res.sendStatus(200);
+  }
+});
+
+app.put("/animals/:id", (req, res) => {
+  const idToUpdate = Number(req.params.id);
+  if (!req.body) {
+    res.status(400).send("Body not found");
+  }
+  const nameToUpdate = req.body.name;
+  const strengthToUpdate = req.body.strength;
+  if (!nameToUpdate || !strengthToUpdate) {
+    res.status(400).send("Please provide name and strength to update");
+  }
+  // Obtener elemento con id idToUpdate del array para actualizarlo
+  const indexAnimal = animals.findIndex((animal) => animal.id == idToUpdate);
+  if (indexAnimal >= 0) {
+    animals[indexAnimal].name = nameToUpdate;
+    animals[indexAnimal].strength = strengthToUpdate;
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(404);
   }
 });
 
