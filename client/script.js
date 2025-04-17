@@ -56,6 +56,10 @@ const updateAnimal = (animal) => {
   const nameToUpdate = prompt("Ingrese un nuevo nombre", animal.name);
   const strengthToUpdate = prompt("Ingrese una nueva fuerza", animal.strength);
   const idToUpdate = animal.id;
+  if(!nameToUpdate || !strengthToUpdate){
+    alert("Por favor ingrese nombre y fuerza");
+    return;
+  }
   fetch(BASE_URL + `/animals/${idToUpdate}`, {
     method: "PUT",
     headers: {
